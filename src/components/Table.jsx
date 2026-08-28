@@ -1,4 +1,13 @@
-export const Table = ({ data, handledeleteUser }) => {
+import { Pagination } from "./Pagination";
+
+export const Table = ({
+  data,
+  handledeleteUser,
+  totalPosts,
+  setCurrentPage,
+  currentPage,
+  postperPage,
+}) => {
   return data == null ? (
     <div> ไม่มีข้อมูล</div>
   ) : (
@@ -17,7 +26,7 @@ export const Table = ({ data, handledeleteUser }) => {
         {data.map((data, index) => (
           <tbody key={index}>
             <tr className="bg-base-200">
-              <th>{index + 1}</th>
+              <th>{data.id}</th>
               <td>{data.name}</td>
               <td>{data.lastname}</td>
               <td>{data.position}</td>
@@ -34,6 +43,12 @@ export const Table = ({ data, handledeleteUser }) => {
           </tbody>
         ))}
       </table>
+      <Pagination
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+        totalPost={totalPosts}
+        postperPage={postperPage}
+      />
     </div>
   );
 };

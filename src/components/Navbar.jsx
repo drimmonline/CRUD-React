@@ -1,19 +1,20 @@
+import { Link } from "react-router";
 export const Navbar = () => {
   return (
-    <div className="max-lg:collapse bg-white text-black lg:mb-48 shadow-sm w-full ">
-      <input id="navbar-1-toggle" className="peer hidden" type="checkbox" />
-
+    <div className="max-lg:collapse bg-white text-black lg:mb-48 shadow-sm lg:w-full ">
       <div className="collapse-title navbar">
         <div className="navbar-start">
-          <button className="btn btn-ghost text-xl text-black">JSD-13</button>
+          <Link to="/" className=" text-xl text-black">
+            JSD-13
+          </Link>
         </div>
         <div className="navbar-center hidden  lg:flex  lg:justify-items-end lg:items-end">
           <ul className="menu menu-horizontal px-1 text-2xl text-black">
             <li>
-              <button>Home</button>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <button>Owner</button>
+              <Link to="owner">Owner</Link>
             </li>
           </ul>
         </div>

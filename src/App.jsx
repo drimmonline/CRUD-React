@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { productData } from "./mockdata";
-import { ProductCard } from "./ProductCard";
-import { Cartpage } from "./Cartpage";
-import { Navbar } from "./Navbar";
-import { Table } from "./Table";
-import { FormInput } from "./FormInput";
+
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
+import { Homepage } from "./pages/Homepage";
+import { Ownerpage } from "./pages/Ownerpage";
+import { Layout } from "./pages/Layout";
+import { UserHomeSection } from "./components/UserHomeSection";
+import { AdminSection } from "./components/AdminSection";
 
 function App() {
-  const [data, setData] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [data, setData] = useState([]);
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
   const [position, setPosition] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postperPage, setPostperPage] = useState(10);
   const API_URL = `https://67eca027aa794fb3222e43e2.mockapi.io/members`;
 
   useEffect(() => {
@@ -23,6 +26,11 @@ function App() {
     };
     getPosts();
   }, []);
+
+  const lastIndex = currentPage * postperPage;
+  const firstIndex = lastIndex - postperPage;
+  const currentPost = data.slice(firstIndex, lastIndex);
+
   function handleSubmitForm(e) {
     e.preventDefault();
     let fieldInput = {
@@ -63,55 +71,58 @@ ${id}`,
         console.log(`${result} data is delete`);
       });
   }
-  return (
-    <div className="min-h-screen flex flex-col items-center  bg-gray-50">
-      <Navbar />
-      <div className="text-center text-3xl font-bold mb-8  text-black">
-        Generation Thailand
-      </div>
-      <div className="text-center text-3xl font-bold mb-8 text-black">
-        Home - Admin Section
-      </div>
-      <div className="flex  gap-3">
-        <button
-          className="shadow-2xl text-black bg-white  p-5 rounded-md"
-          onClick={() => setIsAdmin(!isAdmin)}
-        >
-          User Home Section
-        </button>
-        <button
-          className="shadow-2xl text-black bg-white p-4 rounded-md"
-          onClick={() => setIsAdmin(!isAdmin)}
-        >
-          Admin Home Section
-        </button>
-      </div>
-      {isAdmin ? (
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      errorElement: (
         <div>
-          <FormInput
-            handleSubmitForm={handleSubmitForm}
-            setLastname={setLastname}
-            setName={setName}
-            setPosition={setPosition}
-          />
-
-          <Table data={data} handledeleteUser={handledeleteUser} />
+          <p>Page Not Found</p>
         </div>
-      ) : (
-        <Table data={data} handledeleteUser={handledeleteUser} />
-      )}
-
-      {/* {productData.map((el, index) => (
-        <ProductCard
-          key={index}
-          product={el}
-          onAddToCart={handleAddToCart} // ส่ง props ชื่อ onAddToCart ไป
-        />
-      ))}
-
-      <Cartpage cartItems={cartItems} onRemoveItem={handleRemoveItem} /> */}
-    </div>
-  );
+      ),
+      children: [
+        {
+          path: "/",
+          element: <Homepage />,
+          children: [
+            {
+              path: "userhomsection",
+              element: (
+                <UserHomeSection
+                  data={currentPost}
+                  handledeleteUser={handledeleteUser}
+                  totalPosts={data?.length || 0}
+                  postperPage={postperPage}
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                />
+              ),
+            },
+            {
+              path: "adminsection",
+              element: (
+                <AdminSection
+                  handleSubmitForm={handleSubmitForm}
+                  handledeleteUser={handledeleteUser}
+                  setName={setName}
+                  setLastname={setLastname}
+                  setPosition={setPosition}
+                  data={currentPost}
+                  totalPosts={data?.length || 0}
+                  postperPage={postperPage}
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                />
+              ),
+            },
+          ],
+        },
+        { path: "owner", element: <Ownerpage /> },
+      ],
+    },
+  ]);
+  return <RouterProvider router={router} />;
 }
 
 export default App;
