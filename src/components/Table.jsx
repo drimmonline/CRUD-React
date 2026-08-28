@@ -1,19 +1,21 @@
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import ModalDelete from "./ModalDelete";
 import { Pagination } from "./Pagination";
 
-export const Table = ({
-  data,
-  totalPosts,
-  setCurrentPage,
-  currentPage,
-  postperPage,
-  setIsDelete,
-  isDelete,
-  confirmDelete,
-  selectedId,
-  setSelectedId,
-}) => {
-  return data == null ? (
+export const Table = () => {
+  const {
+    confirmDelete,
+    currentPost,
+    postperPage,
+    setCurrentPage,
+    currentPage,
+    setIsDelete,
+    isDelete,
+    selectedId,
+    setSelectedId,
+  } = useContext(UserContext);
+  return currentPost == null ? (
     <div> ไม่มีข้อมูล</div>
   ) : (
     <div className="overflow-x-auto my-10 relative">
@@ -28,7 +30,7 @@ export const Table = ({
             <th>Action</th>
           </tr>
         </thead>
-        {data.map((data, index) => (
+        {currentPost.map((data, index) => (
           <tbody key={index}>
             <tr className="bg-base-200">
               <th>{(currentPage - 1) * postperPage + index + 1}</th>
@@ -52,7 +54,6 @@ export const Table = ({
       <Pagination
         setCurrentPage={setCurrentPage}
         currentPage={currentPage}
-        totalPost={totalPosts}
         postperPage={postperPage}
       />
       {isDelete && (

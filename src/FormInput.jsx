@@ -1,9 +1,9 @@
-export const FormInput = ({
-  handleSubmitForm,
-  setPosition,
-  setName,
-  setLastname,
-}) => {
+import { useContext } from "react";
+import { UserContext } from "./context/UserContext";
+
+export const FormInput = () => {
+  const { handleSubmitForm } = useContext(UserContext);
+  const { setPosition, setName, setLastname } = useContext(UserContext);
   return (
     <div className="mt-5">
       <h1>Create User Here </h1>

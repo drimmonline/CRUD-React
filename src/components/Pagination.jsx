@@ -1,13 +1,8 @@
-export const Pagination = ({
-  setCurrentPage,
-  currentPage,
-  totalPost,
-  postperPage,
-}) => {
-  let pages = [];
-  for (let i = 1; i <= Math.ceil(totalPost / postperPage); i++) {
-    pages.push(i);
-  }
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+
+export const Pagination = () => {
+  const { setCurrentPage, currentPage, pages } = useContext(UserContext);
 
   return (
     <div className="join text-black mt-3">
