@@ -7,6 +7,11 @@ export const UserHomeSection = ({
   currentPage,
   totalPosts,
   setCurrentPage,
+  setIsDelete,
+  isDelete,
+  confirmDelete,
+  selectedId,
+  setSelectedId,
 }) => {
   return (
     <Table
@@ -17,6 +22,11 @@ export const UserHomeSection = ({
       postperPage={postperPage}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
+      setIsDelete={setIsDelete}
+      isDelete={isDelete}
+      confirmDelete={confirmDelete}
+      selectedId={selectedId}
+      setSelectedId={setSelectedId}
     />
   );
 };

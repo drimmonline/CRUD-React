@@ -16,6 +16,8 @@ function App() {
   const [position, setPosition] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [postperPage, setPostperPage] = useState(10);
+  const [isDelete, setIsDelete] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
   const API_URL = `https://67eca027aa794fb3222e43e2.mockapi.io/members`;
 
   useEffect(() => {
@@ -29,23 +31,35 @@ function App() {
 
   const lastIndex = currentPage * postperPage;
   const firstIndex = lastIndex - postperPage;
-  const currentPost = data.slice(firstIndex, lastIndex);
+  const currentPost = data.slice(firstIndex, lastIndex).sort((a, b) => a - b);
+  const confirmDelete = () => {
+    handledeleteUser(selectedId); // 1. สั่งลบ
+    setIsDelete(false); // 2. ปิด Modal ทันที
+    setSelectedId(null); // 3. เคลียร์ค่า ID
+  };
 
   function handleSubmitForm(e) {
     e.preventDefault();
-    let fieldInput = {
+
+    const fieldInput = {
       name: name,
       lastname: lastname,
       position: position,
     };
+    console.log(`ข้อมูลData :${name} ${lastname} ${position}`);
+
     console.log(`ข้อมูล :${fieldInput}`);
     fetch(API_URL, {
       method: "POST",
       headers: {
         Accept: "application/form-data",
         "Content-Type": "application/json",
-        body: JSON.stringify(fieldInput),
       },
+      body: JSON.stringify({
+        name: name,
+        lastname: lastname,
+        position: position,
+      }),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -54,18 +68,14 @@ function App() {
   }
 
   function handledeleteUser(id) {
-    fetch(
-      `https://67eca027aa794fb3222e43e2.mockapi.io/members/
-${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Accept: "application/form-data",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+    fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/form-data",
+        "Content-Type": "application/json",
       },
-    )
+      body: JSON.stringify(data),
+    })
       .then((res) => res.json())
       .then((result) => {
         console.log(`${result} data is delete`);
@@ -96,6 +106,11 @@ ${id}`,
                   postperPage={postperPage}
                   setCurrentPage={setCurrentPage}
                   currentPage={currentPage}
+                  setIsDelete={setIsDelete}
+                  isDelete={isDelete}
+                  confirmDelete={confirmDelete}
+                  selectedId={selectedId}
+                  setSelectedId={setSelectedId}
                 />
               ),
             },
@@ -113,6 +128,11 @@ ${id}`,
                   postperPage={postperPage}
                   setCurrentPage={setCurrentPage}
                   currentPage={currentPage}
+                  setIsDelete={setIsDelete}
+                  isDelete={isDelete}
+                  confirmDelete={confirmDelete}
+                  selectedId={selectedId}
+                  setSelectedId={setSelectedId}
                 />
               ),
             },

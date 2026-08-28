@@ -10,7 +10,7 @@ export const Pagination = ({
   }
 
   return (
-    <div className="join text-black">
+    <div className="join text-black mt-3">
       {pages.map((page, index) => (
         <button
           className={`join-item btn ${page === currentPage ? "active" : "border-2 text-black bg-white"}`}

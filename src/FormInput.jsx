@@ -40,7 +40,7 @@ export const FormInput = ({
             onChange={(e) => setPosition(e.target.value)}
           />
           <button
-            className="rounded-sm p-2 bg-purple-500 text-2xl text-white"
+            className="rounded-sm p-2 bg-purple-500 text-2xl text-white "
             type="submit"
           >
             Save

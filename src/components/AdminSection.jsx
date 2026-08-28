@@ -12,6 +12,10 @@ export const AdminSection = ({
   setCurrentPage,
   currentPage,
   totalPosts,
+  isDelete,
+  confirmDelete,
+  setSelectedId,
+  setIsDelete,
 }) => {
   return (
     <div className="text-white">
@@ -29,6 +33,10 @@ export const AdminSection = ({
         postperPage={postperPage}
         setCurrentPage={setCurrentPage}
         currentPage={currentPage}
+        isDelete={isDelete}
+        confirmDelete={confirmDelete}
+        setSelectedId={setSelectedId}
+        setIsDelete={setIsDelete}
       />
     </div>
   );
