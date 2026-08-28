@@ -8,11 +8,19 @@ export const Pagination = () => {
     <div className="join text-black mt-3">
       {pages.map((page, index) => (
         <button
-          className={`join-item btn ${page === currentPage ? "active" : "border-2 text-black bg-white"}`}
           key={index}
-          onClick={() => setCurrentPage(page)}
+          // ถ้าเป็น '...' จะไม่สั่งให้เปลี่ยนหน้า
+          onClick={() => typeof page === "number" && setCurrentPage(page)}
+          // ปุ่มไหนเป็น '...' ให้ cursor เป็น default และไม่มีเอฟเฟกต์ hover
+          className={`px-4 py-2 rounded-md ${
+            page === currentPage
+              ? "bg-blue-600 text-white font-bold"
+              : page === "..."
+                ? "text-gray-500 cursor-default"
+                : "bg-gray-200 hover:bg-gray-300 text-black cursor-pointer"
+          }`}
         >
-          Pages {page}
+          {page}
         </button>
       ))}
     </div>

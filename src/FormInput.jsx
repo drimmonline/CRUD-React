@@ -3,7 +3,7 @@ import { UserContext } from "./context/UserContext";
 
 export const FormInput = () => {
   const { handleSubmitForm } = useContext(UserContext);
-  const { setPosition, setName, setLastname } = useContext(UserContext);
+  const { formData, handleChange } = useContext(UserContext);
   return (
     <div className="mt-5">
       <h1>Create User Here </h1>
@@ -17,27 +17,36 @@ export const FormInput = () => {
             id="name"
             className="input  bg-white text-black"
             placeholder="Name"
-            onChange={(e) => setName(e.target.value)}
+            value={formData.name}
+            name="name"
+            onChange={handleChange}
+            required
           />
           <label className="label" htmlFor="name">
             Lastname
           </label>
           <input
             type="text"
-            id="name"
+            id="lastname"
+            name="lastname"
+            value={formData.lastname}
             className="input  bg-white text-black"
             placeholder="Lastname"
-            onChange={(e) => setLastname(e.target.value)}
+            onChange={handleChange}
+            required
           />
           <label className="label" htmlFor="name">
             Position
           </label>
           <input
             type="text"
-            id="name"
+            id="position"
+            name="position"
             className="input  bg-white text-black"
             placeholder="Position"
-            onChange={(e) => setPosition(e.target.value)}
+            value={formData.position}
+            onChange={handleChange}
+            required
           />
           <button
             className="rounded-sm p-2 bg-purple-500 text-2xl text-white "

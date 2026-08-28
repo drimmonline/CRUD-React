@@ -2,23 +2,27 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import ModalDelete from "./ModalDelete";
 import { Pagination } from "./Pagination";
+import { ModalSuccess } from "./ModalSuccess";
 
 export const Table = () => {
   const {
     confirmDelete,
     currentPost,
     postperPage,
-    setCurrentPage,
     currentPage,
     setIsDelete,
     isDelete,
     selectedId,
     setSelectedId,
+    isSuccess,
   } = useContext(UserContext);
   return currentPost == null ? (
-    <div> ไม่มีข้อมูล</div>
+    <button type="button" class="bg-indigo-500 ..." disabled>
+      <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>
+      Processing...
+    </button>
   ) : (
-    <div className="overflow-x-auto my-10 relative">
+    <div className="overflow-x-auto my-10 relative px-5">
       <table className="table">
         {/* head */}
         <thead className="bg-base-200">
@@ -51,11 +55,7 @@ export const Table = () => {
           </tbody>
         ))}
       </table>
-      <Pagination
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
-        postperPage={postperPage}
-      />
+      <Pagination />
       {isDelete && (
         <ModalDelete
           onClose={() => setIsDelete(false)}
@@ -63,6 +63,7 @@ export const Table = () => {
           selectedId={selectedId}
         />
       )}
+      {isSuccess && <ModalSuccess />}
     </div>
   );
 };

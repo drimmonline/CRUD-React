@@ -15,7 +15,7 @@ class ApiClient {
 
   async request(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
-    const headers = this.getHeaders(options.headers);
+    const headers = this.getHeader(options.headers);
     const config = {
       ...options,
       headers,

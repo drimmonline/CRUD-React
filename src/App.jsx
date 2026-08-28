@@ -21,6 +21,10 @@ function App() {
           element: <Homepage />,
           children: [
             {
+              index: true,
+              element: <UserHomeSection />,
+            },
+            {
               path: "userhomsection",
               element: <UserHomeSection />,
             },
