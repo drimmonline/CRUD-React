@@ -1,44 +1,107 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { productData } from "./mockdata";
 import { ProductCard } from "./ProductCard";
 import { Cartpage } from "./Cartpage";
+import { Navbar } from "./Navbar";
+import { Table } from "./Table";
+import { FormInput } from "./FormInput";
 
 function App() {
-  function handleRemoveItem(productName) {
-    // ใช้ .filter() เพื่อกรองเอาเฉพาะสินค้าที่ "ชื่อไม่ตรงกับที่กดลบ" ไว้ในตะกร้า
-    setCartItems(cartItems.filter((item) => item.productName !== productName));
+  const [data, setData] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [position, setPosition] = useState("");
+  const API_URL = `https://67eca027aa794fb3222e43e2.mockapi.io/members`;
+
+  useEffect(() => {
+    const getPosts = async () => {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setData(data);
+    };
+    getPosts();
+  }, []);
+  function handleSubmitForm(e) {
+    e.preventDefault();
+    let fieldInput = {
+      name: name,
+      lastname: lastname,
+      position: position,
+    };
+    console.log(`ข้อมูล :${fieldInput}`);
+    fetch(API_URL, {
+      method: "POST",
+      headers: {
+        Accept: "application/form-data",
+        "Content-Type": "application/json",
+        body: JSON.stringify(fieldInput),
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
   }
-  // ย้ายตะกร้าสินค้ามาไว้ที่ตัวแม่ (App)
-  const [cartItems, setCartItems] = useState([]);
 
-  // ฟังก์ชันเพิ่มลงตะกร้า (รับข้อมูลสินค้า และจำนวนจาก counter)
-  function handleAddToCart(item, quantity) {
-    // mockdata ของเราไม่มี id เลยใช้ productName เป็นตัวอ้างอิงแทน
-    const isItemInCart = cartItems.find(
-      (cartItem) => cartItem.productName === item.productName,
-    );
-
-    if (isItemInCart) {
-      // ถ้ามีสินค้าอยู่แล้ว ให้บวกจำนวนเพิ่มเข้าไป
-      setCartItems(
-        cartItems.map((cartItem) =>
-          cartItem.productName === item.productName
-            ? { ...cartItem, quantity: cartItem.quantity + quantity }
-            : cartItem,
-        ),
-      );
-    } else {
-      // ถ้ายังไม่มี ให้เพิ่มสินค้าใหม่พร้อมจำนวน
-      setCartItems([...cartItems, { ...item, quantity: quantity }]);
-    }
+  function handledeleteUser(id) {
+    fetch(
+      `https://67eca027aa794fb3222e43e2.mockapi.io/members/
+${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/form-data",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      },
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(`${result} data is delete`);
+      });
   }
   return (
-    <div className="min-h-screen flex flex-col items-center py-10 bg-gray-50">
-      <div className="text-center text-3xl font-bold mb-8">Products</div>
+    <div className="min-h-screen flex flex-col items-center  bg-gray-50">
+      <Navbar />
+      <div className="text-center text-3xl font-bold mb-8  text-black">
+        Generation Thailand
+      </div>
+      <div className="text-center text-3xl font-bold mb-8 text-black">
+        Home - Admin Section
+      </div>
+      <div className="flex  gap-3">
+        <button
+          className="shadow-2xl text-black bg-white  p-5 rounded-md"
+          onClick={() => setIsAdmin(!isAdmin)}
+        >
+          User Home Section
+        </button>
+        <button
+          className="shadow-2xl text-black bg-white p-4 rounded-md"
+          onClick={() => setIsAdmin(!isAdmin)}
+        >
+          Admin Home Section
+        </button>
+      </div>
+      {isAdmin ? (
+        <div>
+          <FormInput
+            handleSubmitForm={handleSubmitForm}
+            setLastname={setLastname}
+            setName={setName}
+            setPosition={setPosition}
+          />
 
-      {/* วนลูปสร้างการ์ดสินค้า และส่งฟังก์ชัน handleAddToCart ลงไป */}
-      {productData.map((el, index) => (
+          <Table data={data} handledeleteUser={handledeleteUser} />
+        </div>
+      ) : (
+        <Table data={data} handledeleteUser={handledeleteUser} />
+      )}
+
+      {/* {productData.map((el, index) => (
         <ProductCard
           key={index}
           product={el}
@@ -46,8 +109,7 @@ function App() {
         />
       ))}
 
-      {/* แยกหน้าตะกร้ามาไว้ด้านล่าง และส่งข้อมูล Array ในตะกร้าไปให้ */}
-      <Cartpage cartItems={cartItems} onRemoveItem={handleRemoveItem} />
+      <Cartpage cartItems={cartItems} onRemoveItem={handleRemoveItem} /> */}
     </div>
   );
 }
